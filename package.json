@@ -1,0 +1,22 @@
+{
+  "name": "ndtf-22",
+  "version": "1.0.0",
+  "description": "Netology Nestjs/Mongo/RxJs/Passport/Ya.Cloud practice project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lorentzimys/ndtf-22.git"
+  },
+  "keywords": [
+    "nestjs"
+  ],
+  "author": "Alexey Stepanov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lorentzimys/ndtf-22/issues"
+  },
+  "homepage": "https://github.com/lorentzimys/ndtf-22#readme"
+}
