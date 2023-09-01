@@ -1,23 +1,34 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Injectable, Request } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
-import { User } from './schemas/user.schema';
-import { SignInDTO, SignUpDTO } from './dto/auth.dto';
+import { UserService } from 'src/user/user.service';
+import { UserDTO } from 'src/user/dto/user.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+  ) {}
 
-  async signup(data: SignUpDTO) {
-    console.log('signup', { ...data });
+  async validateUser(login: string, password: string): Promise<UserDTO> {
+    const user = await this.userService.getByLogin(login);
 
-    return Promise.resolve(true);
+    if (user && user.password === password) {
+      return user;
+    }
+
+    return null;
   }
 
-  async signin(data: SignInDTO) {
-    console.log('signin', { ...data });
+  async login(@Request() req) {
+    const {
+      user: { login, email },
+    } = req;
+    const payload = { login, email };
 
-    return Promise.resolve(true);
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 }

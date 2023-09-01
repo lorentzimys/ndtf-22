@@ -1,11 +1,12 @@
 export class SignUpDTO {
+  login: string;
   email: string;
   firstName: string;
-  lastName: string;
   password: string;
 }
 
 export class SignInDTO {
-  email: string;
+  login?: string;
+  email?: string;
   password: string;
 }
