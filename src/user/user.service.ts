@@ -10,20 +10,42 @@ export class UserService {
   constructor(@InjectModel(User.name) private model: Model<User>) {}
 
   async getById(id: string): Promise<User> {
-    return (await this.model.findOne({ _id: id })).toObject();
+    const user = await this.model.findOne({ _id: id });
+
+    if (user) {
+      return user.toObject();
+    }
+
+    return null;
   }
 
   async getByLogin(login: string): Promise<User> {
-    return (await this.model.findOne({ login })).toObject();
+    const user = await this.model.findOne({ login });
+
+    if (user) {
+      return user.toObject();
+    }
+
+    return null;
   }
 
   async getByEmail(email: string): Promise<User> {
-    return (await this.model.findOne({ email })).toObject();
+    const user = await this.model.findOne({ email });
+
+    if (user) {
+      return user.toObject();
+    }
+
+    return null;
   }
 
   async createUser(data: UserDTO): Promise<User> {
     const newUser = new this.model(data);
 
     return (await newUser.save()).toObject();
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return (await this.model.find()).map((user) => user.toObject());
   }
 }

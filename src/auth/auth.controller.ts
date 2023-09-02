@@ -1,31 +1,25 @@
-import { Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignInDTO } from './dto/auth.dto';
-import { AuthGuard } from '@nestjs/passport';
+import { SignUpDTO } from './dto/auth.dto';
+import { JWTAuthGuard } from './guards/jwt-auth.guard';
+import { UserDTO } from 'src/user/dto/user.dto';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @Controller(`/api/auth`)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // @Post(`signup`)
-  // async signup(
-  //   @Body() user: UserDTO,
-  // ): Promise<Omit<UserDTO, 'password'>> {
-  //   // return await this.authService.signup(mockData);
-  // }
+  @UseGuards(LocalAuthGuard)
+  @Post(`signup`)
+  async signup(@Body() user: SignUpDTO): Promise<Omit<UserDTO, 'password'>> {
+    console.log(user);
+    return await this.authService.register(user);
+  }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JWTAuthGuard)
   @Post(`signin`)
-  async signin() {
-    const mockData: SignInDTO = {
-      login: 'testuser',
-      email: 'test@yandex.ru',
-      password: 'testpass',
-    };
-
-    return await this.authService.login(
-      mockData.email,
-      mockData.password,
-    );
+  async signin(@Request() req) {
+    console.log(req.user);
+    return await this.authService.login(req.user);
   }
 }

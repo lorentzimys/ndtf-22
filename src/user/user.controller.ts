@@ -15,6 +15,13 @@ export class UserController {
     return omit(user, 'password');
   }
 
+  @Get()
+  async getAllUsers(): Promise<Omit<User, 'password'>[]> {
+    const users = await this.userService.getAllUsers();
+
+    return users.map((user) => omit(user, 'password'));
+  }
+
   @Post()
   async createUser(
     @Body() user: UserDTO,

@@ -6,7 +6,6 @@ export class SignUpDTO {
 }
 
 export class SignInDTO {
-  login?: string;
   email?: string;
   password: string;
 }
