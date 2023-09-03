@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post, Param } from '@nestjs/common';
+import { Body, Controller, Get, Post, Param, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.schema';
 import { UserDTO } from './dto/user.dto';
-import { PasswordHashPipe } from 'src/common/pipes/passwordHash.pipe';
 import { omit } from 'lodash';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('/api/user')
 export class UserController {
@@ -15,6 +15,7 @@ export class UserController {
     return omit(user, 'password');
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   async getAllUsers(): Promise<Omit<User, 'password'>[]> {
     const users = await this.userService.getAllUsers();
@@ -23,14 +24,8 @@ export class UserController {
   }
 
   @Post()
-  async createUser(
-    @Body() user: UserDTO,
-    @Body('password', PasswordHashPipe) password: string,
-  ): Promise<Omit<User, 'password'>> {
-    const createdUser = await this.userService.createUser({
-      ...user,
-      password,
-    });
+  async createUser(@Body() user: UserDTO): Promise<Omit<User, 'password'>> {
+    const createdUser = await this.userService.createUser(user);
 
     return omit(createdUser, 'password');
   }

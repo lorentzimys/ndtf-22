@@ -4,10 +4,14 @@ import { Model } from 'mongoose';
 
 import { User } from './user.schema';
 import { UserDTO } from './dto/user.dto';
+import { PasswordHashPipe } from 'src/common/pipes/passwordHash.pipe';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private model: Model<User>) {}
+  constructor(
+    @InjectModel(User.name) private model: Model<User>,
+    private readonly passwordHashService: PasswordHashPipe,
+  ) {}
 
   async getById(id: string): Promise<User> {
     const user = await this.model.findOne({ _id: id });
@@ -40,7 +44,13 @@ export class UserService {
   }
 
   async createUser(data: UserDTO): Promise<User> {
-    const newUser = new this.model(data);
+    const hashedPassword = await this.passwordHashService.transform(
+      data.password,
+    );
+    const newUser = new this.model({
+      ...data,
+      password: hashedPassword,
+    });
 
     return (await newUser.save()).toObject();
   }
