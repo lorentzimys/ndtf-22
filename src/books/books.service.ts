@@ -19,7 +19,7 @@ export class BooksService {
   async createBook(data: CreateBookDTO): Promise<Book> {
     const newBook = new this.bookModel(data);
 
-    return newBook.save();
+    return await newBook.save();
   }
 
   async updateBook(id: string, data: UpdateBookDTO): Promise<BookModel> {

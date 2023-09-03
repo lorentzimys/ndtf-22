@@ -13,7 +13,7 @@ import { Book } from './schemas/book.schema';
 import { BookValidationPipe } from './book.validation.pipe';
 import { bookValidationSchema } from './schemas/book.validation.schema';
 import { UpdateBookDTO } from './dto/book.dto';
-import { HttpExceptionFilter } from 'src/common/filters/exception.filter';
+import { HttpExceptionFilter } from '../common/filters/exception.filter';
 
 @Controller('books')
 export class BooksController {

@@ -3,10 +3,16 @@ import { BooksController } from './books.controller';
 import { BooksService } from './books.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Book, BookSchema } from './schemas/book.schema';
+// import { HttpExceptionFilter } from '../common/filters/exception.filter';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Book.name, schema: BookSchema }]),
+    MongooseModule.forFeatureAsync([
+      {
+        name: Book.name,
+        useFactory: () => BookSchema,
+      },
+    ]),
   ],
   controllers: [BooksController],
   providers: [BooksService],
