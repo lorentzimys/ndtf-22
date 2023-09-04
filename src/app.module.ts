@@ -6,6 +6,8 @@ import { BooksModule } from './books/books.module';
 import { WrapResponseInterceptor } from './common/interceptors/wrapResponse.interceptor';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { BookCommentsService } from './book-comments/book-comments.service';
+import { BookCommentsModule } from './book-comments/book-comments.module';
 
 @Module({
   imports: [
@@ -17,8 +19,9 @@ import { UserModule } from './user/user.module';
     AuthModule,
     BooksModule,
     UserModule,
+    BookCommentsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, WrapResponseInterceptor],
+  providers: [AppService, WrapResponseInterceptor, BookCommentsService],
 })
 export class AppModule {}
